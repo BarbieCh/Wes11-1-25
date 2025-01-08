@@ -146,12 +146,118 @@
         <button onclick="nextPage(2)">Next</button>
     </div>
 
-    <!-- Rest of the HTML remains the same, just replace all photo placeholders with img tags -->
+    <div id="page2" class="page">
+        <div class="photo-placeholder">Photo 2</div>
+        <div class="caption">One week on Bumble</div>
+        <button onclick="nextPage(3)">Next</button>
+    </div>
+
+    <div id="page3" class="page">
+        <div class="photo-placeholder">Photo 3</div>
+        <div class="caption">Our First Date</div>
+        <button onclick="nextPage(4)">Next</button>
+    </div>
+
+    <div id="page4" class="page">
+        <div class="photo-placeholder">Photo 4</div>
+        <div class="caption">Will you be my boyfriend?</div>
+        <button onclick="answerYes()">Yes</button>
+        <button onclick="answerNo()">No</button>
+    </div>
+
+    <div id="page5" class="page">
+        <div class="caption">Yay! Congrats let's celebrate! ❤️</div>
+        <div class="photo-placeholder">Celebration Photo</div>
+        <button onclick="nextPage(6)">Next</button>
+    </div>
+
+    <div id="page6" class="page">
+        <div class="caption">Pick a date for our celebration!</div>
+        <input type="date" id="celebrationDate" class="calendar" min="2025-01-01" max="2025-01-31">
+        <button onclick="saveDateAndNext()">Next</button>
+    </div>
+
+    <div id="page7" class="page">
+        <div class="caption">Choose an activity:</div>
+        <div class="activity-grid">
+            <div class="activity-option" onclick="selectActivity(this, 'Dinner Date')">Dinner Date</div>
+            <div class="activity-option" onclick="selectActivity(this, 'Movie Night')">Movie Night</div>
+            <div class="activity-option" onclick="selectActivity(this, 'Picnic')">Picnic</div>
+            <div class="activity-option" onclick="selectActivity(this, 'Game Night')">Game Night</div>
+        </div>
+        <button onclick="saveActivityAndNext()">Next</button>
+    </div>
+
+    <div id="page8" class="page">
+        <div class="caption">Your Selection:</div>
+        <div class="final-message">
+            <p>Date: <span id="selectedDate"></span></p>
+            <p>Activity: <span id="selectedActivity"></span></p>
+            <p>Please screenshot and send to Barbie 😊</p>
+        </div>
+    </div>
 
     <div class="signature">B.</div>
 
     <script>
-        // Previous JavaScript remains the same
+       let selectedActivityValue = '';
+
+        function createConfetti() {
+            for(let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = ['#ff69b4', '#ff1493', '#ffb6c1', '#ffd6e6'][Math.floor(Math.random() * 4)];
+                confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                document.body.appendChild(confetti);
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+
+        function nextPage(pageNum) {
+            document.querySelector('.page.active').classList.remove('active');
+            document.getElementById('page' + pageNum).classList.add('active');
+        }
+
+        function answerYes() {
+            nextPage(5);
+            createConfetti();
+        }
+
+        function answerNo() {
+            nextPage(1);
+        }
+
+        function saveDateAndNext() {
+            const date = document.getElementById('celebrationDate').value;
+            if(!date) {
+                alert('Please select a date!');
+                return;
+            }
+            document.getElementById('selectedDate').textContent = new Date(date).toLocaleDateString();
+            nextPage(7);
+        }
+
+        function selectActivity(element, activity) {
+            document.querySelectorAll('.activity-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedActivityValue = activity;
+        }
+
+        function saveActivityAndNext() {
+            if(!selectedActivityValue) {
+                alert('Please select an activity!');
+                return;
+            }
+            document.getElementById('selectedActivity').textContent = selectedActivityValue;
+            nextPage(8);
+        }
+
+        // Set min date to today
+        const today = new Date();
+        const dateInput = document.getElementById('celebrationDate');
+        dateInput.min = '2025-01-01';
+        dateInput.max = '2025-01-31';
 
         // Add floating hearts animation
         function createHeart() {
